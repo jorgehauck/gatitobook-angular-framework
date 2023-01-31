@@ -1,14 +1,15 @@
+import { environment } from './../../environments/environment.prod';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { UsuarioService } from './usuario/usuario.service';
 
+const API = environment.apiURL;
+
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacaoService {
-
-  private url: string = 'http://localhost:3000/user/login';
 
   constructor(
     private httpClient: HttpClient,
@@ -16,7 +17,7 @@ export class AutenticacaoService {
     ) { }
 
   public autenticar(usuario: string, senha: string): Observable<HttpResponse<any>> {
-      return this.httpClient.post(this.url,
+      return this.httpClient.post(`${API}/user/login`,
         {
           userName: usuario,
           password: senha
@@ -24,7 +25,7 @@ export class AutenticacaoService {
       { observe: 'response' }
       ).pipe(
         tap((res) => {
-          const authToken = res.headers.get('z-access-token') ?? '';
+          const authToken = res.headers.get('x-access-token') ?? '';
           this.usuarioService.salvaToken(authToken);
         })
       )
