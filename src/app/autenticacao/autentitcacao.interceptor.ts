@@ -16,6 +16,10 @@ export class AutentitcacaoInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
+    /*
+    Pegar o token no serviço de token e validar se o mesmo existe para que cada requisição seja levado no cabeçalho
+    de autorização, nesse contexto no caso o x-access-token.
+    */
     if(this.tokenService.possuiToken()) {
       const token = this.tokenService.retornaToken();
       const headers = new HttpHeaders().append('x-access-token', token);
